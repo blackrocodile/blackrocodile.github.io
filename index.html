@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ArcGIS API for JavaScript Tutorials: Display a scene</title>
+  <title>ArcGIS API for a scene</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -19,8 +19,12 @@
     require([
       "esri/config",
       "esri/Map",
+      "esri/views/MapView", 
+      "esri/Graphic", 
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer",
       "esri/views/SceneView"
-  ], function(esriConfig,Map, SceneView) {
+  ], function(esriConfig,Map, MapView, Graphic, GraphicsLayer, FeatureLayer, SceneView) {
 
     esriConfig.apiKey = "AAPK6e70f2b3e075441bb629b12b62345c98bJhIHSKIQr60Qs55jwj9Xp1E-Vo8ciOhlQMUi8ShQKFxvvLVfEa0xhJBmyKc6ng6";
 
@@ -42,7 +46,19 @@
       }
       });
       
+      // Define a pop-up for informing on flood-danger zones
+      const popupTopog = {
+        "title": "Topographic Information of Zurich",
+        "content": "<b>Height:</b> {hoehe}<br><b>Countour length:</b> {Shape__Length}"
+      };   
       
+      const topog = new FeatureLayer({
+        url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/Zurich_Contour_Lines/FeatureServer/2",
+        outFields: ["hoehe","Shape_Length"],
+        popupTemplate: popupTopog,
+      });
+      
+      map.add(topog);
       
     });
   </script>
