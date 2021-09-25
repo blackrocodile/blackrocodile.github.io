@@ -40,25 +40,48 @@
       
       const graphicsLayer = new GraphicsLayer();
       
-      map.add(graphicsLayer);
+      
       
       // Create a polygon geometry
       const polygon = {
         type: "polygon",
         rings: [
-          [8.54, 47.373], //Longitude, latitude
-          [8.54, 47.375], //Longitude, latitude
-          [8.54, 47.378], //Longitude, latitude
-          [8.50, 47.378],   //Longitude, latitude
-          [8.50, 47.375]  //Longitude, latitude
+          [8.531020,47.388154], //Longitude, latitude //1
+          [8.534437,47.386254], //2
+          [8.536336,47.385004], //3
+          [8.536433,47.385055], //4
+          [8.538085,47.384300], //5
+          [8.538665,47.383900], //6
+          [8.539169,47.383459], //7
+          [8.539094,47.383292], //8
+          [8.540035,47.382869], //9
+          [8.539947,47.382632], //10
+          [47.379927,8.541867], //11
+          [8.538480,47.379322], //12
+          [8.529119,47.377035], //13
+          [8.523188,47.379851], //14
+          [8.496795,47.381115], //15
+          [8.463665,47.386461], //16
+          [8.461433,47.387740], //17
+          [8.438946,47.392272], //18
+          [8.474651,47.404371], //19
+          [8.480144,47.404284], //20
+          [8.486217,47.401910], //21
+          [8.495937,47.399513], //22
+          [8.501065,47.398046], //23
+          [8.507846,47.395345], //24
+          [8.514949,47.394415], //25
+          [8.522459,47.392294], //26
+          [8.526192,47.390900], //27
+
         ]
       };
       
       const simpleFillSymbol = {
         type: "simple-fill",
-        color: [227, 139, 79, 0.8],  // Orange, opacity 80%
+        color: [58,173,148, 0.8],  // Orange, opacity 80%
         outline: {
-          color: [255, 255, 255],
+          color: [55, 55, 55],
           width: 1
         }
       };
@@ -69,8 +92,8 @@
       };
       
       const attributes = {
-        Name: "Graphic",
-        Description: "I am a polygon"
+        Name: "Flood danger zone",
+        Description: "Areas to be affected by floods when water level rises by 1-2 m"
       };
       
       const polygonGraphic = new Graphic({
@@ -168,8 +191,9 @@
       map.add(seismic);
       map.add(garden);
       map.add(glacier);
-      map.add(contour);
       
+      map.add(contour);
+      map.add(graphicsLayer);
       
     });
   </script>
