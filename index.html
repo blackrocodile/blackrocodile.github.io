@@ -23,28 +23,98 @@
       "esri/Graphic", 
       "esri/layers/GraphicsLayer",
       "esri/layers/FeatureLayer",
-      "esri/views/SceneView"
-  ], function(esriConfig,Map, MapView, Graphic, GraphicsLayer, FeatureLayer, SceneView) {
-
-    esriConfig.apiKey = "AAPK6e70f2b3e075441bb629b12b62345c98bJhIHSKIQr60Qs55jwj9Xp1E-Vo8ciOhlQMUi8ShQKFxvvLVfEa0xhJBmyKc6ng6";
-
-    const map = new Map({
+      "esri/views/SceneView",
+      "esri/layers/ElevationLayer",
+      "esri/layers/BaseElevationLayer",
+      "esri/Basemap",
+      "esri/layers/TileLayer",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/BasemapGallery"
+  ], function(esriConfig,Map, MapView, Graphic, GraphicsLayer, FeatureLayer, SceneView,ElevationLayer, BaseElevationLayer, Basemap, TileLayer,BasemapToggle, BasemapGallery) {
+      esriConfig.apiKey = "AAPK6e70f2b3e075441bb629b12b62345c98bJhIHSKIQr60Qs55jwj9Xp1E-Vo8ciOhlQMUi8ShQKFxvvLVfEa0xhJBmyKc6ng6";
+      
+      const map = new Map({
       basemap: "arcgis-topographic", //Basemap layer service
       ground: "world-elevation", //Elevation service
     });
       
-    const view = new SceneView({
-      container: "viewDiv",
-      map: map,
-      camera: {
-        position: {
-          x: 8.54, //Longitude //8.55 top-view //8.54 river-bed //8.538 city-center
-          y: 47.373, //Latitude //47.35 top-view //47.31,47.373 river-bed //47.36 city-center
-          z: 700 //Meters //20k top-view //10k,700 river-bed //880 city-center
-        },
-        tilt: 72 //5 top-view //35 river-bed //72 city-center
-      }
+      const graphicsLayer = new GraphicsLayer();
+      
+      map.add(graphicsLayer);
+      
+      // Create a polygon geometry
+      const polygon = {
+        type: "polygon",
+        rings: [
+          [8.54, 47.373], //Longitude, latitude
+          [8.54, 47.375], //Longitude, latitude
+          [8.54, 47.378], //Longitude, latitude
+          [8.50, 47.378],   //Longitude, latitude
+          [8.50, 47.375]  //Longitude, latitude
+        ]
+      };
+      
+      const simpleFillSymbol = {
+        type: "simple-fill",
+        color: [227, 139, 79, 0.8],  // Orange, opacity 80%
+        outline: {
+          color: [255, 255, 255],
+          width: 1
+        }
+      };
+      
+      const popupTemplate = {
+        title: "{Name}",
+        content: "{Description}"
+      };
+      
+      const attributes = {
+        Name: "Graphic",
+        Description: "I am a polygon"
+      };
+      
+      const polygonGraphic = new Graphic({
+        geometry: polygon,
+        symbol: simpleFillSymbol,
+        attributes: attributes,
+        popupTemplate: popupTemplate
       });
+      
+      graphicsLayer.add(polygonGraphic);
+      
+      const view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        camera: {
+          position: {
+            x: 8.54, //Longitude //8.55 top-view //8.54 river-bed //8.538 city-center
+            y: 47.373, //Latitude //47.35 top-view //47.31,47.373 river-bed //47.36 city-center
+            z: 700 //Meters //20k top-view //10k,700 river-bed //880 city-center
+            // 8.54, 47.373, 700
+          },
+          tilt: 72 //5 top-view //35 river-bed //72 city-center
+        }
+      });
+      
+      const basemapToggle = new BasemapToggle({
+        view: view,
+        nextBasemap: "arcgis-imagery"
+      });
+      
+      view.ui.add(basemapToggle,"bottom-right");
+      
+      const basemapGallery = new BasemapGallery({
+        view: view,
+        source: 
+        {
+          query: 
+          {
+            title: '"World Basemaps for Developers" AND owner:esri'
+          }
+        }
+      });
+      
+      view.ui.add(basemapGallery, "top-right"); // Add to the view 
       
       // Define a pop-up for informing on flood-danger zones
       const popupContour = {
