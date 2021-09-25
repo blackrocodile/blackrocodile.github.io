@@ -46,7 +46,7 @@
       const polygon = {
         type: "polygon",
         rings: [
-          [8.531020,47.388154], //Longitude, latitude //1
+          [8.531020,47.388154], //lon.,lat.//1
           [8.534437,47.386254], //2
           [8.536336,47.385004], //3
           [8.536433,47.385055], //4
@@ -55,15 +55,14 @@
           [8.539169,47.383459], //7
           [8.539094,47.383292], //8
           [8.540035,47.382869], //9
-          [8.539947,47.382632], //10
-          [8.541867,47.379927], //11
-          [8.538480,47.379322], //12
-          [8.529119,47.377035], //13
-          [8.523188,47.379851], //14
-          [8.507846,47.395345], //15
-          [8.514949,47.394415], //16
-          [8.522459,47.392294], //17
-          [8.526192,47.390900], //18
+          [8.541867,47.379927], //10
+          [8.539119,47.379035], //11
+          [8.532559,47.378012], //12
+          [8.530018,47.379523], //13
+          [8.507846,47.395345], //14
+          [8.514949,47.394415], //15
+          [8.522459,47.392294], //16
+          [8.526192,47.390900], //17
 
         ]
       };
@@ -87,23 +86,47 @@
         Description: "Areas to be affected by floods when water level rises by 1-2 m"
       };
       
-      const polygonGraphic = new Graphic({
+      const polygonGraphicP1 = new Graphic({
         geometry: polygon,
         symbol: simpleFillSymbol,
         attributes: attributes,
         popupTemplate: popupTemplate
       });
       
-      graphicsLayer.add(polygonGraphic);
+      graphicsLayer.add(polygonGraphicP1);
+      
+      
+      // Create a line geometry to indicate cut-off point of polygon 1
+      const polyline1 = {
+        type: "polyline",
+        paths: 
+        [
+          [8.507604,47.395413],
+          [8.530018,47.379523]
+        ]
+      };
+      
+      const simpleLineSymbol = {
+        type: "simple-line",
+        color: [40, 20, 240], // indigo
+        width: 2
+      };
+      
+      const polylineGraphic = new Graphic({
+        geometry: polyline1,
+        symbol: simpleLineSymbol
+      });
+      
+      graphicsLayer.add(polylineGraphic);
       
       const view = new SceneView({
         container: "viewDiv",
         map: map,
         camera: {
           position: {
-            x: 8.537, //Longitude //8.55 top-view //8.54 river-bed //8.538 city-center
-            y: 47.3749, //Latitude //47.35 top-view //47.31,47.373 river-bed //47.36 city-center
-            z: 800 //Meters //20k top-view //10k,700 river-bed //880 city-center
+            x: 8.538, //Longitude //8.55 top-view //8.54 river-bed //8.538 city-center
+            y: 47.36, //Latitude //47.35 top-view //47.31,47.373 river-bed //47.36 city-center
+            z: 980 //Meters //20k top-view //10k,700 river-bed //880 city-center
             // 8.54, 47.373, 700
           },
           tilt: 72 //5 top-view //35 river-bed //72 city-center
