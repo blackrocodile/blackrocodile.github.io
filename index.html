@@ -38,27 +38,68 @@
       map: map,
       camera: {
         position: {
-          x: 8.538, //Longitude //8.55 top-view //8.54 river-bed //8.538 city-center
-          y: 47.36, //Latitude //47.35 top-view //47.31 river-bed //47.36 city-center
-          z: 880 //Meters //20k top-view //10k river-bed //880 city-center
+          x: 8.54, //Longitude //8.55 top-view //8.54 river-bed //8.538 city-center
+          y: 47.373, //Latitude //47.35 top-view //47.31,47.373 river-bed //47.36 city-center
+          z: 700 //Meters //20k top-view //10k,700 river-bed //880 city-center
         },
         tilt: 72 //5 top-view //35 river-bed //72 city-center
       }
       });
       
       // Define a pop-up for informing on flood-danger zones
-      const popupTopog = {
-        "title": "Topographic Information of Zurich",
+      const popupContour = {
+        "title": "Height (contour) Information of Zurich",
         "content": "<b>Height:</b> {hoehe}<br><b>Countour length:</b> {Shape__Length}"
       };   
-      
-      const topog = new FeatureLayer({
+      // Define the feature layer for the pop-up
+      const contour = new FeatureLayer({
         url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/Zurich_Contour_Lines/FeatureServer/2",
         outFields: ["hoehe","Shape_Length"],
-        popupTemplate: popupTopog,
+        popupTemplate: popupContour,
       });
       
-      map.add(topog);
+      // Define a pop-up for informing on seismic events including tsunamis
+      const popupSeismic = {
+        "title": "Info on Seismic Activity",
+        "content": "<b>eventType:</b> {eventType}<br><b>eventTime:</b> {eventTime}<br><b>place:</b> {place}<br><b>alert:</b> {alert}<br><b>updated:</b> {updated}<br><b>status:</b> {status}<br><b>detail:</b> {detail}<br><b>longitude:</b> {longitude}<br><b>latitude:</b> {latitude}<br><b>depth:</b> {depth}<br><b>tsunami:</b> {tsunami}"
+      };
+      // Define the feature layer for the pop-up
+      const seismic = new FeatureLayer({
+        url: "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USGS_Seismic_Data_v1/FeatureServer/0",
+        outFields: ["eventType", "eventTime", "place", "alert", "updated", "status", "detail", "longitude", "latitude", "depth", "tsunami"],
+        popupTemplate: popupSeismic,
+      });
+      
+      // Define a pop-up for gardens and the like around Zurich
+      const popupGarden = {
+        "title": "Parks & Gardens in Zurich",
+        "content": "<b>Description:</b> {typ}<br><b>Public/Private:</b> {einstufung}<br><b>Location:</b> {inventarad}<br><b>Status:</b> {schutzstat}<br><b>Details:</b> {bezeichnun}"
+      };   
+      // Define the feature layer for the pop-up
+      const garden = new FeatureLayer({
+        url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/Zurich_Parks_Parcels/FeatureServer/0",
+        outFields: ["typ","einstufung","inventarad","schutzstat","bezeichnun"],
+        popupTemplate: popupGarden,
+      });
+      
+      // Define a pop-up for swiss glaciers to inform on potential flood-flow due to global warming
+      const popupGlacier = {
+        "title": "Swiss Glaciers",
+        "content": "<b>Glacier name:</b> {Name}<br><b> Area (potential water-flow):</b> {Shape__Area}"
+      };   
+      // Define the feature layer for the pop-up
+      const glacier = new FeatureLayer({
+        url: "https://services.arcgis.com/XSeYKQzfXnEgju9o/arcgis/rest/services/Swiss_glaciers/FeatureServer/0",
+        outFields: ["Name","Shape_Area"],
+        popupTemplate: popupGlacier,
+      });
+      
+      // add pop-ups to map // latest on top
+      map.add(seismic);
+      map.add(garden);
+      map.add(glacier);
+      map.add(contour);
+      
       
     });
   </script>
